@@ -37,7 +37,14 @@ const getRoleConfig = (): {
 
 export const useDonationSystem = () => {
   const { address } = useAccount();
-  const { sendTransaction, data: txHash, error: txError, isPending: isTxPending } = useSendTransaction();
+  const { 
+    sendTransaction, 
+    data: txHash, 
+    error: txError, 
+    isPending: isTxPending,
+    isError,
+    isSuccess 
+  } = useSendTransaction();
   const { isLoading: isConfirming, isSuccess: isConfirmed, error: receiptError } = useWaitForTransactionReceipt({
     hash: txHash,
   });
@@ -61,6 +68,8 @@ export const useDonationSystem = () => {
       isTxPending, 
       isConfirming, 
       isConfirmed, 
+      isSuccess,
+      isError,
       txHash: txHash?.slice(0, 10) + "...",
       txError: txError?.message,
       receiptError: receiptError?.message 
@@ -68,20 +77,29 @@ export const useDonationSystem = () => {
     
     if (isTxPending) {
       setIsProcessing(true);
-      setMessage("Transaction pending... Please confirm in your wallet");
-    } else if (isConfirming) {
-      setMessage("Transaction submitted... Waiting for confirmation");
-    } else if (isConfirmed) {
+      setMessage("🔄 Opening wallet... Please confirm the transaction");
+    } else if (isConfirming && txHash) {
+      setMessage("⏳ Transaction submitted... Waiting for network confirmation");
+    } else if (isConfirmed && txHash) {
       setIsProcessing(false);
-      setMessage("✅ Transaction confirmed! Donation completed successfully 🎉");
+      setMessage("✅ Donation completed successfully! 🎉");
       console.log("🎉 Transaction confirmed! Hash:", txHash);
-    } else if (txError || receiptError) {
+    } else if (txError || receiptError || isError) {
       setIsProcessing(false);
       const errorMsg = txError?.message || receiptError?.message || "Transaction failed";
-      setMessage(`❌ Error: ${errorMsg}`);
-      console.error("❌ Transaction failed:", { txError, receiptError });
+      
+      // Handle specific error types
+      if (errorMsg.includes("User rejected") || errorMsg.includes("denied")) {
+        setMessage("❌ Transaction cancelled by user");
+      } else if (errorMsg.includes("insufficient funds")) {
+        setMessage("❌ Insufficient balance for this transaction");
+      } else {
+        setMessage(`❌ Transaction failed: ${errorMsg}`);
+      }
+      
+      console.error("❌ Transaction failed:", { txError, receiptError, isError });
     }
-  }, [isTxPending, isConfirming, isConfirmed, txError, receiptError, txHash]);
+  }, [isTxPending, isConfirming, isConfirmed, isSuccess, isError, txError, receiptError, txHash]);
 
   // Refresh config when localStorage changes
   useEffect(() => {
@@ -136,53 +154,55 @@ export const useDonationSystem = () => {
 
   // Función para donar (real wallet transaction)
   const donar = useCallback(async (amount: string, shelter: string) => {
-    console.log("🚀 Donation initiated:", { amount, shelter });
+    console.log("🚀 Donation initiated:", { amount, shelter, userAddress: address });
     
     if (!amount || !shelter) {
-      setMessage("Please provide amount and shelter address");
+      setMessage("❌ Please provide amount and shelter address");
       return;
     }
 
     if (!address) {
-      setMessage("Please connect your wallet first");
+      setMessage("❌ Please connect your wallet first");
       return;
     }
 
     try {
       setIsProcessing(true);
-      setMessage("Preparing transaction...");
-      console.log("💰 Sending transaction:", { 
+      setMessage("⚡ Preparing transaction...");
+      
+      const valueInWei = parseEther(amount);
+      console.log("💰 Transaction details:", { 
         to: shelter, 
-        value: parseEther(amount).toString(),
+        value: valueInWei.toString(),
         amountETH: amount,
-        from: address
+        from: address,
+        sendTransaction: typeof sendTransaction
       });
+      
+      // Clear any previous messages
+      setMessage("");
       
       // Send ETH transaction to shelter address
-      console.log("📡 About to call sendTransaction with params:", {
-        to: shelter,
-        value: parseEther(amount).toString(),
-        valueWei: parseEther(amount),
-      });
+      console.log("📡 Calling sendTransaction...");
       
-      const result = await sendTransaction({
+      sendTransaction({
         to: shelter as `0x${string}`,
-        value: parseEther(amount),
+        value: valueInWei,
       });
       
-      console.log("✅ Transaction initiated, result:", result);
-      // Transaction state will be handled by useEffect above
+      console.log("📲 Wallet should open now...");
+      
     } catch (error: any) {
       console.error("❌ Transaction error:", error);
       setIsProcessing(false);
       
       // Handle different error types
-      if (error.message?.includes("User rejected")) {
-        setMessage("Transaction cancelled by user");
+      if (error.message?.includes("User rejected") || error.message?.includes("denied")) {
+        setMessage("❌ Transaction cancelled by user");
       } else if (error.message?.includes("insufficient funds")) {
-        setMessage("Insufficient balance for this transaction");
+        setMessage("❌ Insufficient balance for this transaction");
       } else {
-        setMessage(`Error initiating transaction: ${error.message || "Unknown error"}`);
+        setMessage(`❌ Error initiating transaction: ${error.message || "Unknown error"}`);
       }
     }
   }, [sendTransaction, address]);

@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { useDonationSystem } from "@/hooks/donation-system/useDonationSystem";
+import DonationPool from "./DonationPool";
 
 const PawPrintSvg = ({ className = "w-20 h-20 text-black/20", ...props }: any) => (
   <svg viewBox="0 0 64 64" className={className} fill="currentColor" aria-hidden {...props}>
@@ -74,8 +75,6 @@ const ArcadeRabbitSvg = ({ className = "w-48 h-48 text-[#2D2D2D]", ...props }: a
 type DonationType = "one-time" | "recurring";
 
 export const DonorPanel = () => {
-  console.log("🎯 DonorPanel rendering...");
-  
   const {
     donar,
     donarRecurrente,
@@ -87,37 +86,6 @@ export const DonorPanel = () => {
     userAddress,
     isConfirmed,
   } = useDonationSystem();
-
-  console.log("📊 DonorPanel state:", {
-    userAddress,
-    protectorasCount: listaProtectoras.length,
-    donantesCount: listaDonantes.length,
-    isProcessing,
-    message
-  });
-
-  // Debug: Test direct wallet connection
-  const testWalletConnection = async () => {
-    console.log("🔍 DEBUG: Testing wallet connection...");
-    console.log("🔍 DEBUG: User address:", userAddress);
-    console.log("🔍 DEBUG: Available shelters:", listaProtectoras);
-    console.log("🔍 DEBUG: donar function:", typeof donar);
-    
-    if (!userAddress) {
-      console.log("❌ DEBUG: Wallet not connected!");
-      alert("❌ Wallet not connected!");
-      return;
-    }
-    
-    if (listaProtectoras.length === 0) {
-      console.log("❌ DEBUG: No shelters configured!");
-      alert("❌ No shelters configured! Please add shelters first in the Roles config.");
-      return;
-    }
-    
-    console.log("✅ DEBUG: All checks passed!");
-    alert(`✅ Wallet connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}\n📊 Available shelters: ${listaProtectoras.length}`);
-  };
 
   const [donationAmount, setDonationAmount] = useState("");
   const [selectedShelter, setSelectedShelter] = useState("");
@@ -141,28 +109,22 @@ export const DonorPanel = () => {
 
   const handleDonar = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("🚀 handleDonar triggered!", { donationAmount, selectedShelter, userAddress });
     
     // Check wallet connection
     if (!userAddress) {
-      console.log("❌ No wallet connected");
       alert("Please connect your wallet first");
       return;
     }
     
     if (!donationAmount || parseFloat(donationAmount) <= 0) {
-      console.log("❌ Invalid amount:", donationAmount);
       alert("Please enter a valid amount");
       return;
     }
 
     if (!selectedShelter) {
-      console.log("❌ No shelter selected");
       alert("Please select a shelter");
       return;
     }
-
-    console.log("✅ All validations passed, calling donar function...");
     
     if (donationType === "recurring") {
       if (!occurrences || parseInt(occurrences) <= 0) {
@@ -191,10 +153,10 @@ export const DonorPanel = () => {
     "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28A0F0] text-gray-900";
 
   return (
-    <div className="relative max-w-6xl mx-auto p-6 space-y-10 bg-gray-50 min-h-screen">
-      {/* subtle yellow tint + repeating paw texture behind the page */}
+    <div className="relative max-w-6xl mx-auto p-6 space-y-10 bg-gray-50">
+      {/* Fondo azul con textura de patas - estilo original amarillo pero en azul */}
       <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#E8F4FD] via-[#D1EBFC] to-[#E3F2FB] opacity-60" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#E8F4FD] via-[#D1EBFC] to-[#E3F2FB] opacity-60" />
         <div
           className="absolute inset-0 bg-repeat opacity-30"
           style={{
@@ -204,15 +166,15 @@ export const DonorPanel = () => {
           }}
         />
       </div>
-  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#28A0F0] via-[#4DB3F5] to-[#7CC7FA] border border-[#2080C0] shadow-xl">
+
+      {/* Header azul con estilo original */}
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#28A0F0] via-[#4DB3F5] to-[#7CC7FA] border border-[#2080C0] shadow-xl">
         <div className="absolute -top-12 -left-10 h-40 w-40 rounded-full bg-white/25" />
         <div className="absolute -bottom-16 -right-6 h-44 w-44 rounded-full bg-white/20" />
         <div className="relative px-8 py-10 text-[#2D2D2D]">
           <div className="flex flex-wrap items-center gap-3 text-sm font-semibold">
-            <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-[11px]">
-              <span role="img" aria-label="spark" className="text-lg">
-                🤝
-              </span>
+            <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-[11px] font-arcade">
+              <span role="img" aria-label="spark" className="text-lg">🤝</span>
               <span className="normal-case">RescueDAO</span> Donor Hub
             </span>
             {userAddress && (
@@ -224,7 +186,8 @@ export const DonorPanel = () => {
               {listaProtectoras.length} shelter{listaProtectoras.length === 1 ? "" : "s"}
             </span>
           </div>
-          {/* richer consistent hero decorations (match ProtectoraPanel) */}
+          
+          {/* Decoraciones de fondo estilo original */}
           <div className="absolute -top-8 -right-12 pointer-events-none transform rotate-6 opacity-40">
             <ArcadeDogSvg className="w-64 h-64" />
           </div>
@@ -234,266 +197,29 @@ export const DonorPanel = () => {
           <div className="absolute top-2 left-1/2 -translate-x-1/2 pointer-events-none transform rotate-3 opacity-24">
             <ArcadeRabbitSvg className="w-48 h-48" />
           </div>
-          {/* extra paw prints to enrich the background (match Admin/Protectora density) */}
-          <div className="absolute top-6 left-6 pointer-events-none opacity-30">
-            <PawPrintSvg className="w-28 h-28 text-black/20" />
-          </div>
-          <div className="absolute bottom-8 right-20 pointer-events-none opacity-28">
-            <PawPrintSvg className="w-20 h-20 text-black/20" />
-          </div>
-          <div className="absolute top-8 right-12 pointer-events-none opacity-28 transform rotate-12">
-            <PawPrintSvg className="w-16 h-16 text-black/20" />
-          </div>
-          <div className="absolute left-10 top-36 pointer-events-none opacity-28">
-            <PawPrintSvg className="w-20 h-20 text-black/20" />
-          </div>
-          <div className="absolute left-1/2 top-20 -translate-x-1/2 pointer-events-none opacity-20">
-            <PawPrintSvg className="w-36 h-36 text-black/20" />
-          </div>
-          {/* additional small arcade dogs and paw prints to match AdminPanel background */}
-          <div className="absolute -top-6 left-6 pointer-events-none opacity-30 transform -rotate-6">
-            <ArcadeDogTiny className="w-14 h-14" />
-          </div>
-          <div className="absolute bottom-10 right-6 pointer-events-none opacity-28">
-            <PawPrintSvg className="w-24 h-24 text-black/20" />
-          </div>
-          <div className="absolute top-28 right-4 pointer-events-none opacity-28">
-            <ArcadeDogTiny className="w-10 h-10" />
-          </div>
-          <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight"><span className="normal-case">RescueDAO</span> — Donor Center</h1>
+          
+          <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight">
+            <span className="normal-case">RescueDAO</span> — Donor Center
+          </h1>
           <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
-            Support verified shelters in Sepolia with a minimal, wallet-first experience. Pick a destination, choose the amount,
-            and confirm directly in your wallet.
+            Support verified shelters in Sepolia with a minimal, wallet-first experience. Contribute through our pool system.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3 text-sm">
-            <div className="rounded-2xl bg-white/70 backdrop-blur border border-white/60 px-4 py-3 shadow-sm">
-              <p className="font-arcade text-[10px] text-gray-600 uppercase tracking-wide">Step 1</p>
-              <p className="font-semibold text-[#2D2D2D]">Select shelter</p>
-            </div>
-            <div className="rounded-2xl bg-white/70 backdrop-blur border border-white/60 px-4 py-3 shadow-sm">
-              <p className="font-arcade text-[10px] text-gray-600 uppercase tracking-wide">Step 2</p>
-              <p className="font-semibold text-[#2D2D2D]">Choose amount & cadence</p>
-            </div>
-            <div className="rounded-2xl bg-white/70 backdrop-blur border border-white/60 px-4 py-3 shadow-sm">
-              <p className="font-arcade text-[10px] text-gray-600 uppercase tracking-wide">Step 3</p>
-              <p className="font-semibold text-[#2D2D2D]">Confirm in your wallet</p>
-            </div>
+          <div className="mt-6 inline-flex items-center gap-4 flex-wrap text-xs text-[#2D2D2D] font-semibold">
+            <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm font-arcade">
+              🔒 Non-custodial
+            </span>
+            <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm font-arcade">
+              🛠️ Built for Sepolia
+            </span>
+            <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm font-arcade">
+              🐾 Pool first
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-2">
-          <div className={sectionClass}>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
-              <div>
-              {/* ensure extra paw prints around the page edges to match AdminPanel */}
-              <div className="absolute top-4 right-4 pointer-events-none opacity-30">
-                <PawPrintSvg className="w-24 h-24 text-black/20" />
-              </div>
-              <div className="absolute bottom-6 left-6 pointer-events-none opacity-28">
-                <PawPrintSvg className="w-20 h-20 text-black/20" />
-              </div>
-                <h3 className={titleClass}>❤️ Make a Donation</h3>
-                <p className="text-sm text-gray-500">Funds move in native ETH on Sepolia. No custodial steps, ever.</p>
-              </div>
-                    {/* small arcade pet badge inside the donation card (decorative) */}
-                    <div className="absolute top-4 left-4 pointer-events-none opacity-40">
-                      <ArcadeDogTiny className="w-12 h-12" />
-                    </div>
-              {isProcessing && (
-                <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#2080C0] bg-[#E6F3FF] border border-[#28A0F0] px-3 py-1 rounded-full font-arcade">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#2080C0] animate-pulse" /> Processing…
-                </span>
-              )}
-            </div>
-            <form onSubmit={handleDonar} className="space-y-5">
-              <div>
-                <label htmlFor="protectora" className="block text-gray-700 font-medium mb-2">
-                  Select a Shelter *
-                </label>
-                <select
-                  id="protectora"
-                  value={selectedShelter}
-                  onChange={e => setSelectedShelter(e.target.value)}
-                  className={inputClass}
-                  disabled={isProcessing}
-                  required
-                >
-                  <option value="">-- Choose a shelter --</option>
-                  {listaProtectoras.map(prot => (
-                    <option key={prot.address} value={prot.address}>
-                      {prot.nombre} ({prot.address.slice(0, 6)}...{prot.address.slice(-4)})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">Donation Type</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button type="button" onClick={() => setDonationType("one-time")} className={toggleButtonClass(donationType === "one-time")}>
-                    💰 One‑time
-                  </button>
-                  <button type="button" onClick={() => setDonationType("recurring")} className={toggleButtonClass(donationType === "recurring")}>
-                    🔄 Recurring
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="donationAmount" className="block text-gray-700 font-medium mb-2">
-                  Amount {donationType === "recurring" ? "per period" : ""} (ETH Sepolia)
-                </label>
-                <input
-                  id="donationAmount"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={donationAmount}
-                  onChange={e => setDonationAmount(e.target.value)}
-                  placeholder="10.00"
-                  className={inputClass}
-                  disabled={isProcessing}
-                />
-              </div>
-
-              {donationType === "recurring" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#F0F8FF] border border-[#28A0F0]/50 rounded-xl">
-                  <div>
-                    <label htmlFor="frecuencia" className="block text-gray-700 font-medium mb-2">
-                      Frequency
-                    </label>
-                    <select
-                      id="frequency"
-                      value={frequency}
-                      onChange={e => setFrequency(e.target.value as "daily" | "weekly" | "monthly")}
-                      className={inputClass}
-                      disabled={isProcessing}
-                    >
-                      <option value="daily">Daily</option>
-                      <option value="weekly">Weekly</option>
-                      <option value="monthly">Monthly</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor="numeroVeces" className="block text-gray-700 font-medium mb-2">
-                      Occurrences
-                    </label>
-                    <input
-                      id="occurrences"
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={occurrences}
-                      onChange={e => setOccurrences(e.target.value)}
-                      placeholder="12"
-                      className={inputClass}
-                      disabled={isProcessing}
-                    />
-                    <p className="text-xs text-gray-600 mt-1">
-                      Estimated total: {donationAmount && occurrences ? (parseFloat(donationAmount) * parseInt(occurrences || "0")).toFixed(4) : "0.0000"} ETH
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <span className="inline-flex items-center gap-2 text-xs text-gray-500 font-arcade">
-                  <span className="inline-flex h-2 w-2 rounded-full bg-[#28A0F0]" />
-                  Switching networks in your wallet may be required before confirming.
-                </span>
-                <div className="flex gap-2">
-                  <button 
-                    type="button" 
-                    onClick={testWalletConnection}
-                    className="px-3 py-2 text-xs bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                  >
-                    🔍 Debug
-                  </button>
-                  <button type="submit" className={primaryButtonClass} disabled={isProcessing}>
-                    {isProcessing ? "⏳ Processing..." : donationType === "recurring" ? "🔄 Set up recurring" : "❤️ Donate now"}
-                  </button>
-                </div>
-              </div>
-            </form>
-            {message && (
-              <div
-                className={`mt-4 p-4 rounded-lg ${
-                  message.includes("Error")
-                    ? "bg-red-50 text-red-800 border border-red-200"
-                    : "bg-green-50 text-green-800 border border-green-200"
-                }`}
-              >
-                {message}
-              </div>
-            )}
-            <div className="mt-4 text-xs text-gray-600">
-              <p className="mb-1">Donations use native ETH on Sepolia. Ensure you have enough balance before confirming.</p>
-              <p>Recurring donations simulate scheduling unless your contract supports it.</p>
-            </div>
-          </div>
-        </div>
-
-        <aside className="space-y-4">
-          <div className={`${sectionClass} relative overflow-hidden`}>
-            <div className="absolute top-0 right-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-[#28A0F0]/30" />
-            <div className="absolute top-6 right-6 pointer-events-none opacity-30">
-              <ArcadeDogTiny className="w-10 h-10" />
-            </div>
-            <div className="absolute bottom-4 left-4 pointer-events-none opacity-30">
-              <PawPrintSvg className="w-14 h-14 text-black/20" />
-            </div>
-            <div className="relative">
-              <h3 className={titleClass}>👤 Your donor profile</h3>
-              {currentDonor ? (
-                <div className="space-y-2">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Name:</span> {currentDonor.nombre}
-                  </p>
-                  <p className="text-xs font-mono text-gray-600 break-words">
-                    {currentDonor.address}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Thank you for supporting the community. Manage your donations from here.
-                  </p>
-                </div>
-              ) : (
-                <p className="text-gray-600 text-sm">
-                  Your account is not in the configured donors list. Ask an administrator to register you.
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className={sectionClass}>
-            <h3 className={titleClass}>📚 Quick tips</h3>
-            <ul className="space-y-3 text-sm text-gray-700">
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#28A0F0]" />
-                <span>Verify addresses before confirming a transaction.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#28A0F0]" />
-                <span>Recurring donations help shelters plan with confidence.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#28A0F0]" />
-                <span>Contact your chosen shelter if you have questions about fund usage.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className={`${sectionClass} bg-[#F0F8FF] border border-[#28A0F0]/50`}>
-            <h3 className={titleClass}>🌟 Experience highlights</h3>
-            <div className="space-y-3 text-sm text-gray-700">
-              <p><span className="font-semibold text-[#2D2D2D]">Minimal & focused:</span> every action is one screen away.</p>
-              <p><span className="font-semibold text-[#2D2D2D]">Consistent branding:</span> leveraging the original amber & charcoal palette.</p>
-              <p><span className="font-semibold text-[#2D2D2D]">Wallet-first:</span> you stay in control from start to finish.</p>
-            </div>
-          </div>
-        </aside>
-      </div>
+      {/* Solo el Pool de Donaciones - Estilo original amarillo adaptado a azul */}
+      <DonationPool />
     </div>
   );
 };

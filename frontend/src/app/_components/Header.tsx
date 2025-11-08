@@ -10,7 +10,7 @@ export function Header() {
   const roleTitle = useMemo(() => {
     switch (currentRole) {
       case 'admin':
-        return 'Administrador';
+        return 'Admin';
       case 'protectora':
         return 'Protectora';
       case 'donor':
@@ -46,7 +46,7 @@ export function Header() {
               </h1>
             </div>
             {currentRole && (
-              <div className="hidden sm:flex items-center gap-2 bg-[#FFF7CC] border border-[#FFD208]/30 px-3 py-1 rounded-full">
+              <div className="hidden sm:flex items-center gap-2 bg-[#E8F4FD] border border-[#28A0F0]/30 px-3 py-1 rounded-full">
                 <span className="text-sm">{roleIcon}</span>
                 <span className="text-sm font-medium text-[#2D2D2D]">
                   {roleTitle}
@@ -59,7 +59,7 @@ export function Header() {
           <div className="flex items-center gap-4">
             {/* Mobile role indicator */}
             {currentRole && (
-              <div className="sm:hidden flex items-center gap-2 bg-[#FFF7CC] border border-[#FFD208]/30 px-2 py-1 rounded-full">
+              <div className="sm:hidden flex items-center gap-2 bg-[#E8F4FD] border border-[#28A0F0]/30 px-2 py-1 rounded-full">
                 <span className="text-sm">{roleIcon}</span>
                 <span className="text-xs font-medium text-[#2D2D2D]">
                   {roleTitle}

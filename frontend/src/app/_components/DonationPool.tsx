@@ -1,115 +1,108 @@
-"use client";
+'use client'
 
-import { useMemo, useState } from "react";
-import { useDonationSystem } from "@/hooks/donation-system/useDonationSystem";
+import { useState } from 'react'
+import { useConnect, useAccount, useBalance } from 'wagmi'
+import { metaMask } from 'wagmi/connectors'
+import { usePoolSystem } from '@/hooks/usePoolSystemSimple'
 
-const PawPrintSvg = ({ className = "w-20 h-20", ...props }: any) => (
-  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
-    <path d="M47.5 18c2.8-3.6 2.3-8.7-1-12-3.3-3.3-8.4-3.8-12-1-3.2 2.5-4.3 6.9-3.4 10.8" stroke="#2D2D2D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
-  </svg>
-);
+export default function DonationPool() {
+  const [amount, setAmount] = useState('')
+  const { connect } = useConnect()
+  const { isConnected, address } = useAccount()
+  const { data: balance } = useBalance({ address })
+  const {
+    donateToPool,
+    isProcessing,
+    message
+  } = usePoolSystem()
 
-export function DonationPool() {
-  const { config } = useDonationSystem();
+  const handleConnectAndDonate = async () => {
+    if (!isConnected) {
+      connect({ connector: metaMask() })
+      return
+    }
 
-  const sectionClass = "relative overflow-hidden rounded-2xl border border-[#FFD208]/30 bg-gradient-to-br from-[#FFF7CC] via-white to-[#FFF7CC]/50 p-6 shadow-xl backdrop-blur";
-  const titleClass = "text-xl font-bold text-[#2D2D2D] mb-2";
+    if (!amount || parseFloat(amount) <= 0) {
+      alert('Please enter a valid amount')
+      return
+    }
+
+    await donateToPool(amount)
+  }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome section */}
-      <div className={sectionClass}>
-        <div className="absolute -bottom-8 -right-8 opacity-8 pointer-events-none transform rotate-6">
-          <PawPrintSvg className="w-32 h-32" />
+    <div className="bg-white shadow-lg p-6 mb-8 rounded-2xl border border-gray-100 text-gray-900">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div>
+          <h3 className="font-extrabold text-[#2D2D2D] text-xl mb-3 flex items-center gap-2">
+            💧 Pool Donations
+          </h3>
+          <p className="text-sm text-gray-500">
+            Funds are distributed equally among all registered shelters. No custodial steps, ever.
+          </p>
         </div>
-        <div className="absolute -top-12 -left-12 pointer-events-none transform -rotate-6 opacity-30">
-          <PawPrintSvg className="w-56 h-56" />
-        </div>
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 pointer-events-none transform rotate-3 opacity-25">
-          <PawPrintSvg className="w-48 h-48" />
-        </div>
-
-        <div className="relative z-10">
-          <div className="mb-6">
-            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-sm font-semibold font-arcade text-[11px]">
-              <span className="text-lg">🐾</span>
-              <span className="flex items-center gap-2">
-                <span className="sr-only">Welcome to RescueDAO</span>
-                <span className="normal-case">Welcome to RescueDAO</span>
-              </span>
-            </div>
-            <h1 className="mt-5 text-4xl md:text-[44px] font-extrabold tracking-tight">Help animals by making a donation</h1>
-            <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
-              Support verified animal shelters with transparent, on-chain donations. Every contribution makes a real difference in the lives of rescued animals.
-            </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3 text-sm">
-              <div className="rounded-2xl bg-white/70 backdrop-blur border border-white/60 px-4 py-3 shadow-sm">
-                <p className="font-arcade text-[10px] text-gray-600 uppercase tracking-wide">Step 1</p>
-                <p className="font-semibold text-[#2D2D2D]">Choose a shelter</p>
-              </div>
-              <div className="rounded-2xl bg-white/70 backdrop-blur border border-white/60 px-4 py-3 shadow-sm">
-                <p className="font-arcade text-[10px] text-gray-600 uppercase tracking-wide">Step 2</p>
-                <p className="font-semibold text-[#2D2D2D]">Set amount & cadence</p>
-              </div>
-              <div className="rounded-2xl bg-white/70 backdrop-blur border border-white/60 px-4 py-3 shadow-sm">
-                <p className="font-arcade text-[10px] text-gray-600 uppercase tracking-wide">Step 3</p>
-                <p className="font-semibold text-[#2D2D2D]">Confirm in your wallet</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Donation form */}
-      <div className={sectionClass}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
-          <div>
-            <h3 className={titleClass}>💝 Make a Donation</h3>
-            <p className="text-sm text-gray-500">Choose a verified shelter below and enter your donation amount.</p>
-          </div>
-        </div>
-
-        {Object.keys(config.protectoras).length === 0 ? (
-          <div className="text-center py-8">
-            <div className="text-4xl mb-4">🏠</div>
-            <h4 className="text-lg font-semibold text-gray-700 mb-2">No shelters available yet</h4>
-            <p className="text-gray-500">
-              Ask an administrator to register some shelters first, or check back later.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {Object.entries(config.protectoras).map(([address, info]) => (
-                <div key={address} className="border border-gray-200 rounded-lg p-4 hover:border-[#FFD208] transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#FFD208] rounded-full flex items-center justify-center">
-                      <span className="text-lg">🏠</span>
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900">{info.nombre}</h4>
-                      <p className="text-xs text-gray-500 font-mono break-all">{address}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      placeholder="0.01"
-                      step="0.01"
-                      min="0"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-[#FFD208]"
-                    />
-                    <span className="text-sm text-gray-600">ETH</span>
-                    <button className="bg-[#FFD208] hover:bg-[#E6BD00] text-[#2D2D2D] font-semibold px-4 py-2 rounded transition-colors">
-                      Donate
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {isProcessing && (
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#2080C0] bg-[#E6F3FF] border border-[#28A0F0] px-3 py-1 rounded-full font-arcade">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#2080C0] animate-pulse" /> Processing…
+          </span>
         )}
       </div>
+      
+      <div className="space-y-5">
+        <div>
+          <label htmlFor="poolAmount" className="block text-gray-700 font-medium mb-2">
+            Amount (ETH Sepolia) *
+          </label>
+          <input
+            id="poolAmount"
+            type="number"
+            step="0.01"
+            min="0"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.1"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28A0F0] text-gray-900"
+            disabled={isProcessing}
+          />
+        </div>
+        
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <span className="inline-flex items-center gap-2 text-xs text-gray-500 font-arcade">
+            <span className="inline-flex h-2 w-2 rounded-full bg-[#28A0F0]" />
+            Switching networks in your wallet may be required before confirming.
+          </span>
+          <button 
+            onClick={handleConnectAndDonate}
+            disabled={isProcessing}
+            className="inline-flex items-center justify-center px-6 py-3 font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed rounded-xl bg-[#28A0F0] text-white hover:bg-[#2080C0] focus-visible:ring-[#2080C0]"
+          >
+            {!isConnected ? (
+              <>🔗 Connect & Donate to Pool</>
+            ) : isProcessing ? (
+              <>⏳ Processing...</>
+            ) : (
+              <>� Donate to Pool</>
+            )}
+          </button>
+        </div>
+      </div>
+      
+      {message && (
+        <div
+          className={`mt-4 p-4 rounded-lg ${
+            message.includes("Error")
+              ? "bg-red-50 text-red-800 border border-red-200"
+              : "bg-green-50 text-green-800 border border-green-200"
+          }`}
+        >
+          {message}
+        </div>
+      )}
+      
+      <div className="mt-4 text-xs text-gray-600">
+        <p className="mb-1">Pool donations are automatically distributed to all registered shelters.</p>
+        <p>Ensure you have enough ETH balance before confirming the transaction.</p>
+      </div>
     </div>
-  );
+  )
 }

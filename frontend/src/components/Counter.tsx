@@ -95,7 +95,7 @@ export function Counter() {
       </div>
 
       {/* Contract Address Info */}
-      <div className="bg-yellow-50 p-4 rounded-lg">
+      <div className="bg-blue-50 p-4 rounded-lg">
         <p className="text-sm text-yellow-800">
           <strong>Contract Address:</strong> {COUNTER_CONTRACT_ADDRESS}
         </p>
