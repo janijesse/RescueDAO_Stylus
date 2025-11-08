@@ -162,7 +162,7 @@ export const RoleConfig = () => {
       {isOpen && (
         <div className="absolute bottom-12 right-0 w-96 bg-white border-2 border-blue-300 shadow-xl rounded-lg p-4 max-h-[80vh] overflow-y-auto">
           <div className={sectionClass}>
-            <h3 className="font-bold text-lg mb-3 text-gray-900 flex items-center gap-2">
+            <h3 className="font-bold text-lg mb-3 text-gray-900 flex items-center gap-2 font-arcade">
               ⚙️ Configuración de Roles
             </h3>
 

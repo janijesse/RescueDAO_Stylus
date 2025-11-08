@@ -32,7 +32,7 @@ export function Header() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🐾</span>
-              <h1 className="text-xl font-bold text-gray-900">
+              <h1 className="text-xl font-bold text-gray-900 font-arcade">
                 RescueDAO
               </h1>
             </div>

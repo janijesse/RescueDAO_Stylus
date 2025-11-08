@@ -72,6 +72,41 @@ const ArcadeRabbitSvg = ({ className = "w-48 h-48 text-[#2D2D2D]", ...props }: a
   </svg>
 );
 
+// Colorful pastel paw prints for decoration
+const PastelPawPrint = ({ className = "w-20 h-20", color = "pink" }: { className?: string; color?: "pink" | "blue" | "green" | "purple" | "orange" }) => {
+  const colorMap = {
+    pink: "#FFB6C1",
+    blue: "#ADD8E6", 
+    green: "#98FB98",
+    purple: "#DDA0DD",
+    orange: "#FFDAB9"
+  };
+  
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <g fill={colorMap[color]} opacity="0.6">
+        {/* main pad */}
+        <ellipse cx="32" cy="45" rx="12" ry="8" />
+        
+        {/* toe pads */}
+        <circle cx="20" cy="30" r="5" />
+        <circle cx="32" cy="26" r="5" />
+        <circle cx="44" cy="30" r="5" />
+        <circle cx="32" cy="36" r="4" />
+      </g>
+      
+      {/* subtle outline */}
+      <g fill="none" stroke={colorMap[color]} strokeWidth="1" opacity="0.8">
+        <ellipse cx="32" cy="45" rx="12" ry="8" />
+        <circle cx="20" cy="30" r="5" />
+        <circle cx="32" cy="26" r="5" />
+        <circle cx="44" cy="30" r="5" />
+        <circle cx="32" cy="36" r="4" />
+      </g>
+    </svg>
+  );
+};
+
 type DonationType = "one-time" | "recurring";
 
 export const DonorPanel = () => {
@@ -141,7 +176,7 @@ export const DonorPanel = () => {
   };
 
   const sectionClass = "bg-white shadow-lg p-6 mb-8 rounded-2xl border border-gray-100 text-gray-900";
-  const titleClass = "font-extrabold text-[#2D2D2D] text-xl mb-3 flex items-center gap-2";
+  const titleClass = "font-extrabold text-[#2D2D2D] text-xl mb-3 flex items-center gap-2 font-arcade";
   const buttonClass =
     "inline-flex items-center justify-center px-6 py-3 font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed rounded-xl";
   const primaryButtonClass = `${buttonClass} bg-[#28A0F0] text-white hover:bg-[#2080C0] focus-visible:ring-[#2080C0]`;
@@ -171,6 +206,30 @@ export const DonorPanel = () => {
       <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#28A0F0] via-[#4DB3F5] to-[#7CC7FA] border border-[#2080C0] shadow-xl">
         <div className="absolute -top-12 -left-10 h-40 w-40 rounded-full bg-white/25" />
         <div className="absolute -bottom-16 -right-6 h-44 w-44 rounded-full bg-white/20" />
+        
+        {/* Colorful pastel paw prints */}
+        <div className="absolute top-8 left-8 pointer-events-none">
+          <PastelPawPrint className="w-28 h-28" color="pink" />
+        </div>
+        <div className="absolute bottom-6 right-8 pointer-events-none">
+          <PastelPawPrint className="w-24 h-24" color="blue" />
+        </div>
+        <div className="absolute top-1/2 right-1/4 pointer-events-none">
+          <PastelPawPrint className="w-20 h-20" color="green" />
+        </div>
+        <div className="absolute top-4 right-6 pointer-events-none">
+          <PastelPawPrint className="w-22 h-22" color="purple" />
+        </div>
+        <div className="absolute bottom-12 left-1/3 pointer-events-none">
+          <PastelPawPrint className="w-26 h-26" color="orange" />
+        </div>
+        <div className="absolute top-16 right-12 pointer-events-none">
+          <PastelPawPrint className="w-18 h-18" color="pink" />
+        </div>
+        <div className="absolute bottom-20 right-1/4 pointer-events-none">
+          <PastelPawPrint className="w-16 h-16" color="blue" />
+        </div>
+        
         <div className="relative px-8 py-10 text-[#2D2D2D]">
           <div className="flex flex-wrap items-center gap-3 text-sm font-semibold">
             <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-[11px] font-arcade">
@@ -198,11 +257,11 @@ export const DonorPanel = () => {
             <ArcadeRabbitSvg className="w-48 h-48" />
           </div>
           
-          <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight font-arcade">
-            <span className="normal-case">RescueDAO</span> — Donor Center
+                    <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight font-arcade">
+            <span className="normal-case">RescueDAO</span> — Support
           </h1>
-          <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
-            Support verified shelters in Sepolia with a minimal, wallet-first experience. Contribute through our pool system.
+          <p className="mt-3 max-w-2xl text-base sm:text-lg text-friendly">
+            Choose shelters, set amounts, and confirm donations in your wallet. All transactions are transparent and funds go directly to verified organizations.
           </p>
           <div className="mt-6 inline-flex items-center gap-4 flex-wrap text-xs text-[#2D2D2D] font-semibold">
             <span className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm font-arcade">

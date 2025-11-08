@@ -34,7 +34,7 @@ export default function DonationPool() {
     <div className="bg-white shadow-lg p-6 mb-8 rounded-2xl border border-gray-100 text-gray-900">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
         <div>
-          <h3 className="font-extrabold text-[#2D2D2D] text-xl mb-3 flex items-center gap-2">
+          <h3 className="font-extrabold text-[#2D2D2D] text-xl mb-3 flex items-center gap-2 font-arcade">
             💧 Pool Donations
           </h3>
           <p className="text-sm text-gray-500">

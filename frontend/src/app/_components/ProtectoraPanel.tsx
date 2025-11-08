@@ -51,6 +51,41 @@ const PawPrintSvg = ({ className = "w-24 h-24 text-black/10" }: { className?: st
   </svg>
 );
 
+// Colorful pastel paw prints for decoration
+const PastelPawPrint = ({ className = "w-20 h-20", color = "pink" }: { className?: string; color?: "pink" | "blue" | "green" | "purple" | "orange" }) => {
+  const colorMap = {
+    pink: "#FFB6C1",
+    blue: "#ADD8E6", 
+    green: "#98FB98",
+    purple: "#DDA0DD",
+    orange: "#FFDAB9"
+  };
+  
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <g fill={colorMap[color]} opacity="0.6">
+        {/* main pad */}
+        <ellipse cx="32" cy="45" rx="12" ry="8" />
+        
+        {/* toe pads */}
+        <circle cx="20" cy="30" r="5" />
+        <circle cx="32" cy="26" r="5" />
+        <circle cx="44" cy="30" r="5" />
+        <circle cx="32" cy="36" r="4" />
+      </g>
+      
+      {/* subtle outline */}
+      <g fill="none" stroke={colorMap[color]} strokeWidth="1" opacity="0.8">
+        <ellipse cx="32" cy="45" rx="12" ry="8" />
+        <circle cx="20" cy="30" r="5" />
+        <circle cx="32" cy="26" r="5" />
+        <circle cx="44" cy="30" r="5" />
+        <circle cx="32" cy="36" r="4" />
+      </g>
+    </svg>
+  );
+};
+
 interface Pet {
   id: string;
   name: string;
@@ -68,7 +103,7 @@ export function ProtectoraPanel() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const sectionClass = "relative overflow-hidden rounded-2xl border border-[#2080C0] bg-gradient-to-br from-[#E8F4FD] via-white to-[#E8F4FD]/50 p-6 shadow-xl backdrop-blur";
-  const titleClass = "text-xl font-bold text-[#2D2D2D] mb-2";
+  const titleClass = "text-xl font-bold text-[#2D2D2D] mb-2 font-arcade";
   const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28A0F0] focus:border-[#28A0F0]";
 
   const handleAddPet = async (e: React.FormEvent) => {
@@ -134,6 +169,30 @@ export function ProtectoraPanel() {
       <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#28A0F0] via-[#4DB3F5] to-[#7CC7FA] border border-[#2080C0] shadow-xl">
         <div className="absolute -top-12 -left-10 h-40 w-40 rounded-full bg-white/25" />
         <div className="absolute -bottom-16 -right-6 h-44 w-44 rounded-full bg-white/20" />
+        
+        {/* Colorful pastel paw prints */}
+        <div className="absolute top-10 right-10 pointer-events-none">
+          <PastelPawPrint className="w-24 h-24" color="green" />
+        </div>
+        <div className="absolute bottom-8 left-8 pointer-events-none">
+          <PastelPawPrint className="w-28 h-28" color="pink" />
+        </div>
+        <div className="absolute top-1/3 left-1/3 pointer-events-none">
+          <PastelPawPrint className="w-20 h-20" color="purple" />
+        </div>
+        <div className="absolute top-4 left-1/2 pointer-events-none">
+          <PastelPawPrint className="w-22 h-22" color="blue" />
+        </div>
+        <div className="absolute bottom-12 right-1/3 pointer-events-none">
+          <PastelPawPrint className="w-26 h-26" color="orange" />
+        </div>
+        <div className="absolute top-16 left-12 pointer-events-none">
+          <PastelPawPrint className="w-18 h-18" color="blue" />
+        </div>
+        <div className="absolute bottom-16 right-6 pointer-events-none">
+          <PastelPawPrint className="w-16 h-16" color="green" />
+        </div>
+        
         <div className="relative px-8 py-10 text-[#2D2D2D]">
           <div className="mb-6">
             <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-sm font-semibold font-arcade text-[11px]">
@@ -144,7 +203,7 @@ export function ProtectoraPanel() {
               </span>
             </div>
             <h1 className="mt-5 text-4xl md:text-[44px] font-extrabold tracking-tight font-arcade"><span className="normal-case">RescueDAO</span> — Shelter Panel</h1>
-            <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
+            <p className="mt-3 max-w-2xl text-base sm:text-lg text-friendly">
               Manage your shelter operations, showcase adoptable pets, and track donations with a clean, dedicated interface designed for animal rescue organizations.
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-3 text-sm">
@@ -165,6 +224,7 @@ export function ProtectoraPanel() {
         </div>
       </div>
 
+            {/* Add New Pet */}
       <div className={sectionClass}>
         <div className="absolute -bottom-8 -right-8 opacity-8 pointer-events-none transform rotate-6">
           <PawPrintSvg className="w-32 h-32" />
@@ -175,6 +235,25 @@ export function ProtectoraPanel() {
         </div>
         <div className="absolute left-6 bottom-10 pointer-events-none opacity-5">
           <PawPrintSvg className="w-16 h-16" />
+        </div>
+        {/* Colorful pastel paw prints */}
+        <div className="absolute top-3 left-3 pointer-events-none">
+          <PastelPawPrint className="w-24 h-24" color="purple" />
+        </div>
+        <div className="absolute bottom-3 right-10 pointer-events-none">
+          <PastelPawPrint className="w-28 h-28" color="orange" />
+        </div>
+        <div className="absolute top-1/2 left-1/4 pointer-events-none">
+          <PastelPawPrint className="w-20 h-20" color="green" />
+        </div>
+        <div className="absolute top-6 right-4 pointer-events-none">
+          <PastelPawPrint className="w-18 h-18" color="pink" />
+        </div>
+        <div className="absolute bottom-8 left-1/2 pointer-events-none">
+          <PastelPawPrint className="w-22 h-22" color="blue" />
+        </div>
+        <div className="absolute top-12 left-8 pointer-events-none">
+          <PastelPawPrint className="w-16 h-16" color="purple" />
         </div>
         {/* decorative pet icons for visual consistency */}
         <div className="absolute top-4 left-4 pointer-events-none opacity-10">
@@ -231,6 +310,22 @@ export function ProtectoraPanel() {
         <div className="absolute top-4 left-6 pointer-events-none opacity-6">
           <PawPrintSvg className="w-32 h-32" />
         </div>
+        {/* Colorful pastel paw prints */}
+        <div className="absolute top-6 right-8 pointer-events-none">
+          <PastelPawPrint className="w-20 h-20" color="pink" />
+        </div>
+        <div className="absolute bottom-8 left-4 pointer-events-none">
+          <PastelPawPrint className="w-24 h-24" color="blue" />
+        </div>
+        <div className="absolute top-1/2 right-4 pointer-events-none">
+          <PastelPawPrint className="w-16 h-16" color="green" />
+        </div>
+        <div className="absolute bottom-4 right-12 pointer-events-none">
+          <PastelPawPrint className="w-18 h-18" color="purple" />
+        </div>
+        <div className="absolute top-8 left-1/3 pointer-events-none">
+          <PastelPawPrint className="w-14 h-14" color="orange" />
+        </div>
         {/* small pet icons in processing panel */}
         <div className="absolute top-4 right-6 pointer-events-none opacity-10">
           <ArcadeRabbitSvg className="w-12 h-12 text-[#2D2D2D]/30" />
@@ -244,7 +339,7 @@ export function ProtectoraPanel() {
         <div className="absolute bottom-6 left-6 opacity-6 pointer-events-none transform rotate-12">
           <PawPrintSvg className="w-16 h-16" />
         </div>
-        <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+        <h3 className="font-bold text-lg mb-2 flex items-center gap-2 font-arcade">
           <span>📊</span>
           <span className="text-[#2D2D2D]">Shelter Statistics</span>
         </h3>

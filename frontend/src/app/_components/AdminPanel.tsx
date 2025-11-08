@@ -56,6 +56,41 @@ const ArcadeRabbitSvg = ({ className = "w-10 h-10 text-[#2D2D2D]" }: { className
 );
 import { useDonationSystem } from "@/hooks/donation-system/useDonationSystem";
 
+// Colorful pastel paw prints for decoration
+const PastelPawPrint = ({ className = "w-20 h-20", color = "pink" }: { className?: string; color?: "pink" | "blue" | "green" | "purple" | "orange" }) => {
+  const colorMap = {
+    pink: "#FFB6C1",
+    blue: "#ADD8E6", 
+    green: "#98FB98",
+    purple: "#DDA0DD",
+    orange: "#FFDAB9"
+  };
+  
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <g fill={colorMap[color]} opacity="0.6">
+        {/* main pad */}
+        <ellipse cx="32" cy="45" rx="12" ry="8" />
+        
+        {/* toe pads */}
+        <circle cx="20" cy="30" r="5" />
+        <circle cx="32" cy="26" r="5" />
+        <circle cx="44" cy="30" r="5" />
+        <circle cx="32" cy="36" r="4" />
+      </g>
+      
+      {/* subtle outline */}
+      <g fill="none" stroke={colorMap[color]} strokeWidth="1" opacity="0.8">
+        <ellipse cx="32" cy="45" rx="12" ry="8" />
+        <circle cx="20" cy="30" r="5" />
+        <circle cx="32" cy="26" r="5" />
+        <circle cx="44" cy="30" r="5" />
+        <circle cx="32" cy="36" r="4" />
+      </g>
+    </svg>
+  );
+};
+
 export function AdminPanel() {
   const { agregarProtectora, isProcessing, message, listaProtectoras } = useDonationSystem();
   const [shelterAddress, setShelterAddress] = useState("");
@@ -63,7 +98,7 @@ export function AdminPanel() {
 
   // Consistent style classes
   const sectionClass = "relative overflow-hidden rounded-2xl border border-[#2080C0] bg-gradient-to-br from-[#E8F4FD] via-white to-[#E8F4FD]/50 p-6 shadow-xl backdrop-blur";
-  const titleClass = "text-xl font-bold text-[#2D2D2D] mb-2";
+  const titleClass = "text-xl font-bold text-[#2D2D2D] mb-2 font-arcade";
   const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28A0F0] focus:border-[#28A0F0]";
 
   const handleAddShelter = useCallback(async (e: React.FormEvent) => {
@@ -113,14 +148,37 @@ export function AdminPanel() {
           <div className="absolute top-2 left-1/2 -translate-x-1/2 pointer-events-none transform rotate-3 opacity-24">
             <ArcadeRabbitSvg className="w-48 h-48" />
           </div>
+          
+          {/* Colorful pastel paw prints */}
+          <div className="absolute top-6 left-6 pointer-events-none">
+            <PastelPawPrint className="w-26 h-26" color="purple" />
+          </div>
+          <div className="absolute bottom-8 right-10 pointer-events-none">
+            <PastelPawPrint className="w-28 h-28" color="orange" />
+          </div>
+          <div className="absolute top-1/3 right-8 pointer-events-none">
+            <PastelPawPrint className="w-24 h-24" color="blue" />
+          </div>
+          <div className="absolute bottom-12 left-12 pointer-events-none">
+            <PastelPawPrint className="w-22 h-22" color="green" />
+          </div>
+          <div className="absolute top-12 right-1/3 pointer-events-none">
+            <PastelPawPrint className="w-20 h-20" color="pink" />
+          </div>
+          <div className="absolute bottom-4 left-1/3 pointer-events-none">
+            <PastelPawPrint className="w-18 h-18" color="purple" />
+          </div>
+          <div className="absolute top-20 left-1/4 pointer-events-none">
+            <PastelPawPrint className="w-16 h-16" color="orange" />
+          </div>
 
           <div className="mb-6">
             <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-[11px]">
               <span role="img" aria-label="spark" className="text-lg">⚙️</span>
               <span className="normal-case">RescueDAO</span> Admin
             </div>
-            <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight text-[#2D2D2D] font-arcade"><span className="normal-case">RescueDAO</span> — Admin Panel</h1>
-            <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
+            <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight text-primary-dark font-arcade"><span className="normal-case">RescueDAO</span> — Admin Panel</h1>
+            <p className="mt-3 max-w-2xl text-base sm:text-lg text-friendly">
               Keep the network curated without leaving this minimal console. Add new shelters, monitor addresses, and keep the
               donation flow tidy.
             </p>
@@ -144,7 +202,18 @@ export function AdminPanel() {
 
       {/* Add New Shelter */}
       <div className={sectionClass}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+        {/* Add some colorful paw prints to this section too */}
+        <div className="absolute top-4 right-6 pointer-events-none">
+          <PastelPawPrint className="w-20 h-20" color="green" />
+        </div>
+        <div className="absolute bottom-6 left-8 pointer-events-none">
+          <PastelPawPrint className="w-24 h-24" color="pink" />
+        </div>
+        <div className="absolute top-1/2 right-1/4 pointer-events-none">
+          <PastelPawPrint className="w-16 h-16" color="blue" />
+        </div>
+        
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 relative z-10">
           <div>
             <h3 className={titleClass}>➕ Add New Shelter</h3>
             <p className="text-sm text-gray-500">Keep entries short & human readable. Addresses are stored in lowercase.</p>
