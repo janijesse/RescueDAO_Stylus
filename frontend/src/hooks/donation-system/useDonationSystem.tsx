@@ -143,29 +143,49 @@ export const useDonationSystem = () => {
       return;
     }
 
+    if (!address) {
+      setMessage("Please connect your wallet first");
+      return;
+    }
+
     try {
       setIsProcessing(true);
       setMessage("Preparing transaction...");
       console.log("💰 Sending transaction:", { 
         to: shelter, 
         value: parseEther(amount).toString(),
-        amountETH: amount 
+        amountETH: amount,
+        from: address
       });
       
       // Send ETH transaction to shelter address
-      await sendTransaction({
+      console.log("📡 About to call sendTransaction with params:", {
+        to: shelter,
+        value: parseEther(amount).toString(),
+        valueWei: parseEther(amount),
+      });
+      
+      const result = await sendTransaction({
         to: shelter as `0x${string}`,
         value: parseEther(amount),
       });
       
-      console.log("✅ Transaction sent, waiting for confirmation...");
+      console.log("✅ Transaction initiated, result:", result);
       // Transaction state will be handled by useEffect above
     } catch (error: any) {
       console.error("❌ Transaction error:", error);
       setIsProcessing(false);
-      setMessage(`Error initiating transaction: ${error.message}`);
+      
+      // Handle different error types
+      if (error.message?.includes("User rejected")) {
+        setMessage("Transaction cancelled by user");
+      } else if (error.message?.includes("insufficient funds")) {
+        setMessage("Insufficient balance for this transaction");
+      } else {
+        setMessage(`Error initiating transaction: ${error.message || "Unknown error"}`);
+      }
     }
-  }, [sendTransaction]);
+  }, [sendTransaction, address]);
 
   // Función para donación recurrente (real wallet transaction)
   const donarRecurrente = useCallback(async (amount: string, shelter: string, frequency: string, occurrences: number) => {

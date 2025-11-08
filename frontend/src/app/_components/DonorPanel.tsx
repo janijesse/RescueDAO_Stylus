@@ -86,6 +86,25 @@ export const DonorPanel = () => {
     isConfirmed,
   } = useDonationSystem();
 
+  // Debug: Test direct wallet connection
+  const testWalletConnection = async () => {
+    console.log("🔍 Testing wallet connection...");
+    console.log("User address:", userAddress);
+    console.log("Available shelters:", listaProtectoras);
+    
+    if (!userAddress) {
+      alert("❌ Wallet not connected!");
+      return;
+    }
+    
+    if (listaProtectoras.length === 0) {
+      alert("❌ No shelters configured! Please add shelters first in the Roles config.");
+      return;
+    }
+    
+    alert(`✅ Wallet connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}\n📊 Available shelters: ${listaProtectoras.length}`);
+  };
+
   const [donationAmount, setDonationAmount] = useState("");
   const [selectedShelter, setSelectedShelter] = useState("");
   const [donationType, setDonationType] = useState<DonationType>("one-time");
@@ -364,9 +383,18 @@ export const DonorPanel = () => {
                   <span className="inline-flex h-2 w-2 rounded-full bg-[#FFD208]" />
                   Switching networks in your wallet may be required before confirming.
                 </span>
-                <button type="submit" className={primaryButtonClass} disabled={isProcessing}>
-                  {isProcessing ? "⏳ Processing..." : donationType === "recurring" ? "🔄 Set up recurring" : "❤️ Donate now"}
-                </button>
+                <div className="flex gap-2">
+                  <button 
+                    type="button" 
+                    onClick={testWalletConnection}
+                    className="px-3 py-2 text-xs bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  >
+                    🔍 Debug
+                  </button>
+                  <button type="submit" className={primaryButtonClass} disabled={isProcessing}>
+                    {isProcessing ? "⏳ Processing..." : donationType === "recurring" ? "🔄 Set up recurring" : "❤️ Donate now"}
+                  </button>
+                </div>
               </div>
             </form>
             {message && (
