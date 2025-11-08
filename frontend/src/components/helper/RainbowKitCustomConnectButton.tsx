@@ -41,7 +41,7 @@ export const RainbowKitCustomConnectButton = () => {
                   <button
                     onClick={openConnectModal}
                     type="button"
-                    className="inline-flex items-center gap-2 bg-[#FFD208] hover:bg-[#E6BD00] text-[#2D2D2D] font-bold px-6 py-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+                    className="inline-flex items-center gap-2 bg-[#28A0F0] hover:bg-[#2080C0] text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
                   >
                     <span>🔗</span>
                     Connect Wallet
@@ -95,7 +95,7 @@ export const RainbowKitCustomConnectButton = () => {
                   <button
                     onClick={openAccountModal}
                     type="button"
-                    className="inline-flex items-center gap-2 bg-[#FFD208] hover:bg-[#E6BD00] text-[#2D2D2D] font-semibold px-4 py-2 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-2 bg-[#28A0F0] hover:bg-[#2080C0] text-white font-semibold px-4 py-2 rounded-lg transition-colors"
                   >
                     {account.displayName}
                     {account.displayBalance

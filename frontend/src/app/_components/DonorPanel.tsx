@@ -11,7 +11,7 @@ const PawPrintSvg = ({ className = "w-20 h-20 text-black/20", ...props }: any) =
 
 const ArcadeDogTiny = ({ className = "w-12 h-12 text-[#2D2D2D]", ...props }: any) => (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
-    <rect width="24" height="24" rx="4" fill="#FFD208" opacity="0.06" />
+    <rect width="24" height="24" rx="4" fill="#28A0F0" opacity="0.06" />
     <path d="M6 15c1.5-2 4-2 6-1s3 3 4 4" stroke="#2D2D2D" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     <circle cx="8" cy="10" r="1.2" fill="#2D2D2D" />
     <circle cx="12" cy="9" r="1.2" fill="#2D2D2D" />
@@ -74,6 +74,8 @@ const ArcadeRabbitSvg = ({ className = "w-48 h-48 text-[#2D2D2D]", ...props }: a
 type DonationType = "one-time" | "recurring";
 
 export const DonorPanel = () => {
+  console.log("🎯 DonorPanel rendering...");
+  
   const {
     donar,
     donarRecurrente,
@@ -86,22 +88,34 @@ export const DonorPanel = () => {
     isConfirmed,
   } = useDonationSystem();
 
+  console.log("📊 DonorPanel state:", {
+    userAddress,
+    protectorasCount: listaProtectoras.length,
+    donantesCount: listaDonantes.length,
+    isProcessing,
+    message
+  });
+
   // Debug: Test direct wallet connection
   const testWalletConnection = async () => {
-    console.log("🔍 Testing wallet connection...");
-    console.log("User address:", userAddress);
-    console.log("Available shelters:", listaProtectoras);
+    console.log("🔍 DEBUG: Testing wallet connection...");
+    console.log("🔍 DEBUG: User address:", userAddress);
+    console.log("🔍 DEBUG: Available shelters:", listaProtectoras);
+    console.log("🔍 DEBUG: donar function:", typeof donar);
     
     if (!userAddress) {
+      console.log("❌ DEBUG: Wallet not connected!");
       alert("❌ Wallet not connected!");
       return;
     }
     
     if (listaProtectoras.length === 0) {
+      console.log("❌ DEBUG: No shelters configured!");
       alert("❌ No shelters configured! Please add shelters first in the Roles config.");
       return;
     }
     
+    console.log("✅ DEBUG: All checks passed!");
     alert(`✅ Wallet connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}\n📊 Available shelters: ${listaProtectoras.length}`);
   };
 
@@ -127,23 +141,29 @@ export const DonorPanel = () => {
 
   const handleDonar = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🚀 handleDonar triggered!", { donationAmount, selectedShelter, userAddress });
     
     // Check wallet connection
     if (!userAddress) {
+      console.log("❌ No wallet connected");
       alert("Please connect your wallet first");
       return;
     }
     
     if (!donationAmount || parseFloat(donationAmount) <= 0) {
+      console.log("❌ Invalid amount:", donationAmount);
       alert("Please enter a valid amount");
       return;
     }
 
     if (!selectedShelter) {
+      console.log("❌ No shelter selected");
       alert("Please select a shelter");
       return;
     }
 
+    console.log("✅ All validations passed, calling donar function...");
+    
     if (donationType === "recurring") {
       if (!occurrences || parseInt(occurrences) <= 0) {
         alert("Please enter the number of occurrences for the recurring donation");
@@ -162,29 +182,29 @@ export const DonorPanel = () => {
   const titleClass = "font-extrabold text-[#2D2D2D] text-xl mb-3 flex items-center gap-2";
   const buttonClass =
     "inline-flex items-center justify-center px-6 py-3 font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed rounded-xl";
-  const primaryButtonClass = `${buttonClass} bg-[#FFD208] text-[#2D2D2D] hover:bg-[#E0B800] focus-visible:ring-[#E0B800]`;
+  const primaryButtonClass = `${buttonClass} bg-[#28A0F0] text-white hover:bg-[#2080C0] focus-visible:ring-[#2080C0]`;
   const toggleButtonClass = (active: boolean) =>
     `flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-200 ${
-      active ? "bg-[#FFD208] text-[#2D2D2D] shadow-md" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+      active ? "bg-[#28A0F0] text-white shadow-md" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
     }`;
   const inputClass =
-    "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD208] text-gray-900";
+    "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28A0F0] text-gray-900";
 
   return (
     <div className="relative max-w-6xl mx-auto p-6 space-y-10 bg-gray-50 min-h-screen">
       {/* subtle yellow tint + repeating paw texture behind the page */}
       <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFF9E6] via-[#FFF3CC] to-[#F8F4E6] opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#E8F4FD] via-[#D1EBFC] to-[#E3F2FB] opacity-60" />
         <div
           className="absolute inset-0 bg-repeat opacity-30"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>%3Cpath fill='%23FFD208' opacity='0.06' d='M32 44c-7 0-12 6-12 8s5 4 12 4 12-2 12-4-5-8-12-8zm-14-12c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14-6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14 6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6z'/%3E%3C/svg%3E\")",
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>%3Cpath fill='%2328A0F0' opacity='0.06' d='M32 44c-7 0-12 6-12 8s5 4 12 4 12-2 12-4-5-8-12-8zm-14-12c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14-6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14 6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6z'/%3E%3C/svg%3E\")",
             backgroundSize: "160px 160px",
           }}
         />
       </div>
-  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#FFD208] via-[#FFE883] to-[#FFF9D1] border border-[#F6D75A] shadow-xl">
+  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#28A0F0] via-[#4DB3F5] to-[#7CC7FA] border border-[#2080C0] shadow-xl">
         <div className="absolute -top-12 -left-10 h-40 w-40 rounded-full bg-white/25" />
         <div className="absolute -bottom-16 -right-6 h-44 w-44 rounded-full bg-white/20" />
         <div className="relative px-8 py-10 text-[#2D2D2D]">
@@ -196,7 +216,7 @@ export const DonorPanel = () => {
               <span className="normal-case">RescueDAO</span> Donor Hub
             </span>
             {userAddress && (
-              <span className="inline-flex items-center gap-2 bg-[#2D2D2D] text-[#FFD208] px-4 py-2 rounded-full border border-black/20 shadow-sm text-xs font-bold uppercase tracking-wide font-arcade">
+              <span className="inline-flex items-center gap-2 bg-[#2D374B] text-[#28A0F0] px-4 py-2 rounded-full border border-black/20 shadow-sm text-xs font-bold uppercase tracking-wide font-arcade">
                 Wallet {userAddress.slice(0, 6)}...{userAddress.slice(-4)}
               </span>
             )}
@@ -282,8 +302,8 @@ export const DonorPanel = () => {
                       <ArcadeDogTiny className="w-12 h-12" />
                     </div>
               {isProcessing && (
-                <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#A38025] bg-[#FFF7CC] border border-[#FFD208] px-3 py-1 rounded-full font-arcade">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#A38025] animate-pulse" /> Processing…
+                <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#2080C0] bg-[#E6F3FF] border border-[#28A0F0] px-3 py-1 rounded-full font-arcade">
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#2080C0] animate-pulse" /> Processing…
                 </span>
               )}
             </div>
@@ -339,7 +359,7 @@ export const DonorPanel = () => {
               </div>
 
               {donationType === "recurring" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FFFCF0] border border-[#FFD208]/50 rounded-xl">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#F0F8FF] border border-[#28A0F0]/50 rounded-xl">
                   <div>
                     <label htmlFor="frecuencia" className="block text-gray-700 font-medium mb-2">
                       Frequency
@@ -380,7 +400,7 @@ export const DonorPanel = () => {
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <span className="inline-flex items-center gap-2 text-xs text-gray-500 font-arcade">
-                  <span className="inline-flex h-2 w-2 rounded-full bg-[#FFD208]" />
+                  <span className="inline-flex h-2 w-2 rounded-full bg-[#28A0F0]" />
                   Switching networks in your wallet may be required before confirming.
                 </span>
                 <div className="flex gap-2">
@@ -417,7 +437,7 @@ export const DonorPanel = () => {
 
         <aside className="space-y-4">
           <div className={`${sectionClass} relative overflow-hidden`}>
-            <div className="absolute top-0 right-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-[#FFD208]/30" />
+            <div className="absolute top-0 right-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-[#28A0F0]/30" />
             <div className="absolute top-6 right-6 pointer-events-none opacity-30">
               <ArcadeDogTiny className="w-10 h-10" />
             </div>
@@ -450,21 +470,21 @@ export const DonorPanel = () => {
             <h3 className={titleClass}>📚 Quick tips</h3>
             <ul className="space-y-3 text-sm text-gray-700">
               <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#FFD208]" />
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#28A0F0]" />
                 <span>Verify addresses before confirming a transaction.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#FFD208]" />
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#28A0F0]" />
                 <span>Recurring donations help shelters plan with confidence.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#FFD208]" />
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#28A0F0]" />
                 <span>Contact your chosen shelter if you have questions about fund usage.</span>
               </li>
             </ul>
           </div>
 
-          <div className={`${sectionClass} bg-[#FFFCF0] border border-[#FFD208]/50`}>
+          <div className={`${sectionClass} bg-[#F0F8FF] border border-[#28A0F0]/50`}>
             <h3 className={titleClass}>🌟 Experience highlights</h3>
             <div className="space-y-3 text-sm text-gray-700">
               <p><span className="font-semibold text-[#2D2D2D]">Minimal & focused:</span> every action is one screen away.</p>

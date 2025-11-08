@@ -1,11 +1,11 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { RainbowKitCustomConnectButton } from "@/components/helper/RainbowKitCustomConnectButton";
+import { RainbowKitCustomConnectButton } from "@/components/helper";
 import { Header } from "./_components/Header";
+import { DonationPool } from "./_components/DonationPool";
 import { AdminPanel } from "./_components/AdminPanel";
 import { ProtectoraPanel } from "./_components/ProtectoraPanel";
-import { DonationPool } from "./_components/DonationPool";
 import { DonorPanel } from "./_components/DonorPanel";
 import { RoleConfig } from "./_components/RoleConfig";
 import { useDonationSystem } from "@/hooks/donation-system/useDonationSystem";
@@ -17,7 +17,7 @@ export default function Home() {
   if (!isConnected) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="relative overflow-hidden rounded-2xl border border-[#FFD208]/30 bg-gradient-to-br from-[#FFF7CC] via-white to-[#FFF7CC]/50 px-8 py-12 text-center shadow-xl backdrop-blur sm:px-12 md:px-16">
+        <div className="relative overflow-hidden rounded-2xl border border-[#28A0F0]/30 bg-linear-to-br from-[#E8F4FD] via-white to-[#E8F4FD]/50 px-8 py-12 text-center shadow-xl backdrop-blur sm:px-12 md:px-16">
           <div className="relative z-10">
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-sm font-semibold font-arcade text-[11px]">
@@ -57,10 +57,15 @@ export default function Home() {
       <Header />
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
+          {/* Mostrar el panel correspondiente según el rol */}
           {currentRole === "admin" && <AdminPanel />}
           {currentRole === "protectora" && <ProtectoraPanel />}
           {currentRole === "donor" && <DonorPanel />}
-          {!currentRole && <DonationPool />}
+          
+          {/* El pool siempre está disponible para todos */}
+          <DonationPool />
+          
+          {/* Configuración de roles */}
           <RoleConfig />
         </div>
       </main>
@@ -68,7 +73,7 @@ export default function Home() {
       <footer className="border-t border-gray-200 bg-white/50 backdrop-blur mt-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-gray-500 text-sm">
-            Built with Stylus SDK (Rust) + Next.js
+            Built with Stylus SDK (Rust) + Next.js - Pool Only Version
           </p>
         </div>
       </footer>
