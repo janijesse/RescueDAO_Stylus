@@ -198,7 +198,7 @@ export const DonorPanel = () => {
             <ArcadeRabbitSvg className="w-48 h-48" />
           </div>
           
-          <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight">
+          <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight font-arcade">
             <span className="normal-case">RescueDAO</span> — Donor Center
           </h1>
           <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">

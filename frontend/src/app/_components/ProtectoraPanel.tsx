@@ -143,7 +143,7 @@ export function ProtectoraPanel() {
                 <span className="normal-case">RescueDAO</span> Shelter Hub
               </span>
             </div>
-            <h1 className="mt-5 text-4xl md:text-[44px] font-extrabold tracking-tight"><span className="normal-case">RescueDAO</span> — Shelter Panel</h1>
+            <h1 className="mt-5 text-4xl md:text-[44px] font-extrabold tracking-tight font-arcade"><span className="normal-case">RescueDAO</span> — Shelter Panel</h1>
             <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
               Manage your shelter operations, showcase adoptable pets, and track donations with a clean, dedicated interface designed for animal rescue organizations.
             </p>

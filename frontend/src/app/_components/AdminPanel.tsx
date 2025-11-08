@@ -119,7 +119,7 @@ export function AdminPanel() {
               <span role="img" aria-label="spark" className="text-lg">⚙️</span>
               <span className="normal-case">RescueDAO</span> Admin
             </div>
-            <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight text-[#2D2D2D]"><span className="normal-case">RescueDAO</span> — Admin Panel</h1>
+            <h1 className="mt-5 text-4xl md:text-[42px] font-extrabold tracking-tight text-[#2D2D2D] font-arcade"><span className="normal-case">RescueDAO</span> — Admin Panel</h1>
             <p className="mt-3 max-w-2xl text-base sm:text-lg text-[#3F3F3F]">
               Keep the network curated without leaving this minimal console. Add new shelters, monitor addresses, and keep the
               donation flow tidy.

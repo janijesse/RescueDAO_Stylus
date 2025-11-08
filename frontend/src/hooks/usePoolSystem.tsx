@@ -48,8 +48,8 @@ const POOL_ABI = [
   }
 ] as const;
 
-// Dirección del contrato pool (simulada - en producción sería la real)
-const POOL_CONTRACT_ADDRESS = "0x742d35Cc6558Dbc5e5bF4c4a8e4d4e4bD4e4c4e4" as const;
+// Dirección del contrato pool deployado en Arbitrum Sepolia
+const POOL_CONTRACT_ADDRESS = "0xcf0532f7795894f7b281908310f4dfe040d6dd70" as const;
 
 export const usePoolSystem = () => {
   const { address } = useAccount();

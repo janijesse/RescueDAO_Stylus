@@ -68,5 +68,5 @@ export const COUNTER_ABI = [
   }
 ] as const;
 
-// Replace with your deployed contract address
-export const COUNTER_CONTRACT_ADDRESS = '0x0000000000000000000000000000000000000000' as const;
+// Contrato Stylus deployado en Arbitrum Sepolia
+export const COUNTER_CONTRACT_ADDRESS = '0xcf0532f7795894f7b281908310f4dfe040d6dd70' as const;

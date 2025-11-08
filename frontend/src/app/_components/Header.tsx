@@ -8,16 +8,7 @@ export function Header() {
   const { currentRole } = useDonationSystem();
 
   const roleTitle = useMemo(() => {
-    switch (currentRole) {
-      case 'admin':
-        return 'Admin';
-      case 'protectora':
-        return 'Protectora';
-      case 'donor':
-        return 'Donante';
-      default:
-        return 'Visitante';
-    }
+   
   }, [currentRole]);
 
   const roleIcon = useMemo(() => {

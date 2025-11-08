@@ -38,7 +38,7 @@ export default function Home() {
               </div>
             </div>
             
-            <h1 className="text-4xl font-bold mb-4">
+            <h1 className="text-4xl font-bold mb-4 font-arcade">
               <span className="bg-linear-to-r from-gray-900 via-blue-800 to-gray-900 bg-clip-text text-transparent">
                 Welcome to RescueDAO
               </span>
