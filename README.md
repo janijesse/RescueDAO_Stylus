@@ -1,53 +1,193 @@
 ![Image](./header.png)
 
-# Stylus Hello World
+# RescueDAO Stylus
 
-Project starter template for writing Arbitrum Stylus programs in Rust using the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs). It includes a Rust implementation of a basic counter Ethereum smart contract:
+This project combines a Rust smart contract built with Arbitrum Stylus and a Next.js frontend interface. It includes both a Rust implementation of a counter smart contract and a modern web interface to interact with it.
 
-```js
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+## Project Structure
 
-contract Counter {
-    uint256 public number;
-
-    function setNumber(uint256 newNumber) public {
-        number = newNumber;
-    }
-
-    function increment() public {
-        number++;
-    }
-}
+```
+├── src/                 # Rust smart contract (Stylus)
+├── examples/            # Rust examples
+├── frontend/            # Next.js frontend application
+├── Cargo.toml          # Rust dependencies
+└── README.md           # This file
 ```
 
-To set up more minimal example that still uses the Stylus SDK, use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` under [OffchainLabs/cargo-stylus](https://github.com/OffchainLabs/cargo-stylus).
+## Smart Contract (Stylus/Rust)
 
-## Quick Start 
+The smart contract implements a basic counter with the following functions:
 
-Install [Rust](https://www.rust-lang.org/tools/install), and then install the Stylus CLI tool with Cargo
+The smart contract implements a basic counter with the following functions:
+
+```rust
+pub fn number(&self) -> U256                    // Get current number
+pub fn set_number(&mut self, new_number: U256)  // Set number to specific value
+pub fn increment(&mut self)                     // Increment by 1
+pub fn add_number(&mut self, new_number: U256)  // Add to current number
+pub fn mul_number(&mut self, new_number: U256)  // Multiply current number
+pub fn add_from_msg_value(&mut self)            // Add ETH value sent (payable)
+```
+
+## Frontend (Next.js)
+
+The frontend is built with:
+- **Next.js 14** with TypeScript
+- **Tailwind CSS** for styling
+- **Wagmi** + **RainbowKit** for Web3 wallet connections
+- **Viem** for Ethereum interactions
+
+### Features
+- Wallet connection with RainbowKit
+- Real-time contract interaction
+- Responsive design
+- Transaction status tracking
+
+## Quick Start
+
+### Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Node.js](https://nodejs.org/) (v18 or later)
+- [Stylus CLI](https://github.com/OffchainLabs/cargo-stylus)
+
+### 1. Install Rust Dependencies
 
 ```bash
 cargo install --force cargo-stylus cargo-stylus-check
-```
-
-Add the `wasm32-unknown-unknown` build target to your Rust compiler:
-
-```
 rustup target add wasm32-unknown-unknown
 ```
 
-You should now have it available as a Cargo subcommand:
+### 2. Setup the Smart Contract
 
 ```bash
-cargo stylus --help
+# Build the contract
+cargo build --target wasm32-unknown-unknown --release
+
+# Check contract (optional)
+cargo stylus check
+
+# Deploy to Arbitrum Sepolia testnet (requires ETH for gas)
+# cargo stylus deploy --endpoint https://sepolia-rollup.arbitrum.io/rpc
 ```
 
-Then, clone the template:
+### 3. Setup the Frontend
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Copy environment file
+cp .env.local.example .env.local
+
+# Edit .env.local with your values:
+# - Get WalletConnect Project ID from https://cloud.walletconnect.com
+# - Update contract address after deployment
+
+# Run development server
+npm run dev
+```
+
+The frontend will be available at [http://localhost:3000](http://localhost:3000).
+
+## Configuration
+
+### Contract Address
+After deploying your contract, update the contract address in:
+- `frontend/src/lib/contracts.ts`
+- `frontend/.env.local`
+
+### WalletConnect Setup
+1. Go to [WalletConnect Cloud](https://cloud.walletconnect.com)
+2. Create a new project
+3. Copy the Project ID
+4. Add it to `frontend/.env.local`
+
+## Development
+
+### Smart Contract Development
+
+```bash
+# Build contract
+cargo build --target wasm32-unknown-unknown --release
+
+# Run tests
+cargo test
+
+# Export ABI (useful for frontend integration)
+cargo stylus export-abi
+```
+
+### Frontend Development
+
+```bash
+cd frontend
+
+# Development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```
+
+## Deployment
+
+### Smart Contract
+Deploy to Arbitrum Sepolia (testnet):
+```bash
+cargo stylus deploy --endpoint https://sepolia-rollup.arbitrum.io/rpc
+```
+
+Deploy to Arbitrum One (mainnet):
+```bash
+cargo stylus deploy --endpoint https://arb1.arbitrum.io/rpc
+```
+
+### Frontend
+The frontend can be deployed to any hosting platform that supports Next.js:
+- Vercel (recommended)
+- Netlify
+- AWS Amplify
+- Railway
+- Self-hosted
+
+## Architecture
 
 ```
-git clone https://github.com/OffchainLabs/stylus-hello-world && cd stylus-hello-world
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Blockchain    │    │  Smart Contract │
+│   (Next.js)     │◄──►│   (Arbitrum)    │◄──►│   (Stylus/Rust) │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
+
+## Technologies
+
+- **Smart Contract**: Rust + Stylus SDK + Arbitrum
+- **Frontend**: Next.js + TypeScript + Tailwind CSS
+- **Web3 Stack**: Wagmi + RainbowKit + Viem
+- **Development**: Cargo + npm
+
+## Resources
+
+- [Stylus Documentation](https://docs.arbitrum.io/stylus)
+- [Stylus SDK](https://github.com/OffchainLabs/stylus-sdk-rs)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Wagmi Documentation](https://wagmi.sh)
+- [RainbowKit Documentation](https://www.rainbowkit.com)
+
+To set up more minimal example that still uses the Stylus SDK, use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` under [OffchainLabs/cargo-stylus](https://github.com/OffchainLabs/cargo-stylus).
+
+---
+
+*This template provides a full-stack foundation for building decentralized applications with Rust smart contracts and modern web frontends.*
 
 ### Testnet Information
 
