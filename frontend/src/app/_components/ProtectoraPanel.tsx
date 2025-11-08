@@ -67,9 +67,9 @@ export function ProtectoraPanel() {
   const [petStory, setPetStory] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const sectionClass = "relative overflow-hidden rounded-2xl border border-[#FFD208]/30 bg-gradient-to-br from-[#FFF7CC] via-white to-[#FFF7CC]/50 p-6 shadow-xl backdrop-blur";
+  const sectionClass = "relative overflow-hidden rounded-2xl border border-[#2080C0] bg-gradient-to-br from-[#E8F4FD] via-white to-[#E8F4FD]/50 p-6 shadow-xl backdrop-blur";
   const titleClass = "text-xl font-bold text-[#2D2D2D] mb-2";
-  const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-[#FFD208]";
+  const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#28A0F0] focus:border-[#28A0F0]";
 
   const handleAddPet = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,36 +116,25 @@ export function ProtectoraPanel() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Welcome section */}
-      <div className={sectionClass}>
+    <div className="relative max-w-6xl mx-auto p-6 space-y-10 bg-gray-50">
+      {/* Fondo azul con textura de patas - estilo original amarillo pero en azul */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div className="absolute inset-0 bg-linear-to-b from-[#E8F4FD] via-[#D1EBFC] to-[#E3F2FB] opacity-60" />
         <div
-          className="absolute inset-0 rounded-2xl"
+          className="absolute inset-0 bg-repeat opacity-30"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>%3Cpath fill='%23FFD208' opacity='0.06' d='M32 44c-7 0-12 6-12 8s5 4 12 4 12-2 12-4-5-8-12-8zm-14-12c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14-6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14 6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6z'/%3E%3C/svg%3E\")",
-            backgroundSize: "80px 80px",
-            backgroundRepeat: "repeat",
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>%3Cpath fill='%2328A0F0' opacity='0.06' d='M32 44c-7 0-12 6-12 8s5 4 12 4 12-2 12-4-5-8-12-8zm-14-12c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14-6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6zm14 6c-3 0-6 3-6 6s3 6 6 6 6-3 6-6-3-6-6-6z'/%3E%3C/svg%3E\")",
+            backgroundSize: "160px 160px",
           }}
         />
-        {/* extra subtle paw prints to enrich the background (increased density) */}
-        <div className="absolute top-6 left-6 pointer-events-none opacity-5">
-          <PawPrintSvg className="w-28 h-28" />
-        </div>
-        <div className="absolute bottom-8 right-20 pointer-events-none opacity-6">
-          <PawPrintSvg className="w-20 h-20" />
-        </div>
-        <div className="absolute top-8 right-12 pointer-events-none opacity-6 transform rotate-12">
-          <PawPrintSvg className="w-16 h-16" />
-        </div>
-        <div className="absolute left-10 top-36 pointer-events-none opacity-6">
-          <PawPrintSvg className="w-20 h-20" />
-        </div>
-        <div className="absolute left-1/2 top-20 -translate-x-1/2 pointer-events-none opacity-4">
-          <PawPrintSvg className="w-36 h-36" />
-        </div>
+      </div>
 
-        <div className="relative z-10">
+      {/* Header azul con estilo original */}
+      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#28A0F0] via-[#4DB3F5] to-[#7CC7FA] border border-[#2080C0] shadow-xl">
+        <div className="absolute -top-12 -left-10 h-40 w-40 rounded-full bg-white/25" />
+        <div className="absolute -bottom-16 -right-6 h-44 w-44 rounded-full bg-white/20" />
+        <div className="relative px-8 py-10 text-[#2D2D2D]">
           <div className="mb-6">
             <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-white/60 shadow-sm text-sm font-semibold font-arcade text-[11px]">
               <span className="text-lg">🏠</span>
@@ -189,7 +178,7 @@ export function ProtectoraPanel() {
         </div>
         {/* decorative pet icons for visual consistency */}
         <div className="absolute top-4 left-4 pointer-events-none opacity-10">
-          <ArcadeDogSvg className="w-12 h-12 text-[#FFD208]/60" />
+          <ArcadeDogSvg className="w-12 h-12 text-[#28A0F0]/60" />
         </div>
         <div className="absolute bottom-8 left-8 pointer-events-none opacity-8">
           <ArcadeCatSvg className="w-14 h-14 text-[#2D2D2D]/20" />
@@ -247,7 +236,7 @@ export function ProtectoraPanel() {
           <ArcadeRabbitSvg className="w-12 h-12 text-[#2D2D2D]/30" />
         </div>
         <div className="absolute bottom-6 right-6 pointer-events-none opacity-8">
-          <ArcadeDogSvg className="w-12 h-12 text-[#FFD208]/40" />
+          <ArcadeDogSvg className="w-12 h-12 text-[#28A0F0]/40" />
         </div>
         <div className="absolute top-6 left-4 opacity-6 pointer-events-none">
           <PawPrintSvg className="w-20 h-20" />
@@ -284,7 +273,7 @@ export function ProtectoraPanel() {
           <ArcadeCatSvg className="w-12 h-12 text-[#2D2D2D]/30" />
         </div>
         <div className="absolute bottom-10 left-6 opacity-8 pointer-events-none">
-          <ArcadeDogSvg className="w-12 h-12 text-[#FFD208]/40" />
+          <ArcadeDogSvg className="w-12 h-12 text-[#28A0F0]/40" />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
           <div>
@@ -292,8 +281,8 @@ export function ProtectoraPanel() {
             <p className="text-sm text-gray-500">Share their name and species. Stories matter—keep it short and friendly.</p>
           </div>
           {isProcessing && (
-            <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#A38025] bg-[#FFF7CC] border border-[#FFD208] px-3 py-1 rounded-full">
-              <span className="inline-block h-2 w-2 rounded-full bg-[#A38025] animate-pulse" /> Adding...
+            <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#1e40af] bg-[#E8F4FD] border border-[#28A0F0] px-3 py-1 rounded-full">
+              <span className="inline-block h-2 w-2 rounded-full bg-[#1e40af] animate-pulse" /> Adding...
             </span>
           )}
         </div>
@@ -345,7 +334,7 @@ export function ProtectoraPanel() {
           <button
             type="submit"
             disabled={isProcessing || !petName.trim() || !petSpecies.trim()}
-            className="w-full sm:w-auto bg-[#FFD208] hover:bg-[#E6BD00] text-[#2D2D2D] font-bold px-6 py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto bg-[#28A0F0] hover:bg-[#2080C0] text-white font-bold px-6 py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isProcessing ? "Adding Pet..." : "Add Pet"}
           </button>
@@ -355,7 +344,7 @@ export function ProtectoraPanel() {
       {/* Our Pets */}
       <div className={sectionClass}>
         <div className="absolute bottom-6 left-6 pointer-events-none opacity-9">
-          <ArcadeDogSvg className="w-14 h-14 text-[#FFD208]/40" />
+          <ArcadeDogSvg className="w-14 h-14 text-[#28A0F0]/40" />
         </div>
         <div className="absolute bottom-6 right-6 opacity-6 pointer-events-none transform rotate-6">
           <PawPrintSvg className="w-24 h-24" />
